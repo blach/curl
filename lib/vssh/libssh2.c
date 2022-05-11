@@ -2149,7 +2149,7 @@ static CURLcode ssh_statemach_act(struct Curl_easy *data, bool *block)
           if(seekerr != CURL_SEEKFUNC_CANTSEEK) {
             // Alexander Blach - make sure to close the file we opened above when seeking fails
             // otherwise a following upload may fail because the file is openend
-            state(conn, SSH_SFTP_CLOSE);
+            state(data, SSH_SFTP_CLOSE);
             sshc->actualcode = CURLE_FTP_COULDNT_USE_REST;
             failf(data, "Could not seek stream");
             break;
@@ -3304,7 +3304,7 @@ static CURLcode ssh_connect(struct Curl_easy *data, bool *done)
 #endif
     
   // Added by Alexander Blach to fix this problem: http://feedback.textasticapp.com/topic/101145-failed-initialization-error-sftp-to-some-hosts/
-  libssh2_session_banner_set(ssh->ssh_session, "SSH-2.0-OpenSSH_7.9p1 (Textastic)");
+  libssh2_session_banner_set(sshc->ssh_session, "SSH-2.0-OpenSSH_7.9p1 (Textastic)");
 
 #ifndef CURL_DISABLE_PROXY
   if(conn->http_proxy.proxytype == CURLPROXY_HTTPS) {
