@@ -2147,8 +2147,15 @@ static CURLcode ssh_statemach_act(struct Curl_easy *data, bool *block)
           curl_off_t passed = 0;
 
           if(seekerr != CURL_SEEKFUNC_CANTSEEK) {
+            // Alexander Blach - make sure to close the file we opened above when seeking fails
+            // otherwise a following upload may fail because the file is openend
+            state(conn, SSH_SFTP_CLOSE);
+            sshc->actualcode = CURLE_FTP_COULDNT_USE_REST;
             failf(data, "Could not seek stream");
-            return CURLE_FTP_COULDNT_USE_REST;
+            break;
+            // was:
+            //failf(data, "Could not seek stream");
+            //return CURLE_FTP_COULDNT_USE_REST;
           }
           /* seekerr == CURL_SEEKFUNC_CANTSEEK (can't seek to offset) */
           do {
