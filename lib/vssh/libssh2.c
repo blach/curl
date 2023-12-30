@@ -3288,6 +3288,9 @@ static CURLcode ssh_connect(struct Curl_easy *data, bool *done)
                              (long)(data->set.server_response_timeout / 1000));
   }
 #endif
+    
+  // Added by Alexander Blach to fix this problem: http://feedback.textasticapp.com/topic/101145-failed-initialization-error-sftp-to-some-hosts/
+  libssh2_session_banner_set(sshc->ssh_session, "SSH-2.0-OpenSSH_7.9p1 Textastic");
 
 #ifndef CURL_DISABLE_PROXY
   if(conn->http_proxy.proxytype == CURLPROXY_HTTPS) {
